@@ -1,0 +1,60 @@
+name : HCM-Build-Scratch-Org
+
+on:
+  push :
+    branches: [*]
+  workflow_dispatch:
+    inputs:
+      buildBetaPackage:
+        description: "Build a BETA package"
+        type: boolean
+        default: true
+        required: false  
+      branchName:
+        description: "Branch name"
+        required: false
+        default: "master"             
+
+jobs:
+  Create_Package:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:          
+      - name: "Authorise Packaging org"
+        run: |
+          echo "${{ secrets.RICO_PACKAGING_ORG_CONSUMER_SECRET }}" > "server.key"
+          sfdx force:auth:jwt:grant --clientid=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwtkeyfile ./server.key
+          sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
+
+      - uses: actions/checkout@v3
+        name: Checkout HCM
+        with:
+          ref: ${{ github.event.inputs.branchName }}
+          token: ${{ secrets.RICO_PACKAGING_ORG_GITHUB_TOKEN }}
+        
+      - name: "Deploy Packaging org"
+        run: |
+          cd hcm/src
+          sfdx force:source:convert --sourcepath=force-app --outputdir package --packagename 'Rico'
+          sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 60
+      
+      - name: "Get data to build the package"
+        run: |
+          sfdx package1:version:list --json > packages
+          jq .packages.result[] | last > lastPackage
+          echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
+          echo "version=lastPackage.version" >> $GITHUB_ENV
+
+      # - name: create tags
+      #   run: |
+      #     git tag -a ${{version + 1}} -m ${{version + 1}} && git push origin --tags
+      #     sfdx force:package1:version:create --packageid ${metadataPackageId} --name ${v} --version ${nextVersion} ${buildBetaPackage ? '' : ' --managedreleased'}`;
+
+
+# there is not possibility to include the post install script, is added by default?
+
+
