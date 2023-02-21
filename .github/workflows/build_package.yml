@@ -2,7 +2,9 @@ name : HCM-Build-Scratch-Org
 
 on:
   push :
-    branches: [*]
+    branches:
+      - master
+      - build_package
   workflow_dispatch:
     inputs:
       buildBetaPackage:
