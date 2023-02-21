@@ -26,6 +26,11 @@ jobs:
         shell: bash
 
     steps:          
+
+      - name: Install Salesforce SFDX
+        run: |
+          npm install -g sfdx-cli
+          
       - name: "Authorise Packaging org"
         run: |
           echo "${{ secrets.RICO_PACKAGING_ORG_CONSUMER_SECRET }}" > "server.key"
