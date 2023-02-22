@@ -63,6 +63,3 @@ jobs:
 
 
 # there is not possibility to include the post install script, is added by default?
-
-
-https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_auth_jwt_flow.htm
