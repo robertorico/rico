@@ -63,9 +63,9 @@ jobs:
     # llamar al script para generar la version
       - name: create tags
         run: |
-          git tag -a 1.1 -m "1.1" 
-          git push origin --tags
-          sfdx force:package1:version:create --packageid "0338d000000E6DqAAK" --name "1.1" --version 1.1
+    # git tag -a 1.0 -m "1.0" 
+    # git push origin --tags
+          sfdx package1:version:create --package-id "0338d000000E6DqAAK" --name "1.0" --version 1.0
 
 
 # there is not possibility to include the post install script, is added by default?
