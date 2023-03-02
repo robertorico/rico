@@ -4,7 +4,6 @@ on:
   push :
     branches:
       - master
-      - build_package
   workflow_dispatch:
     inputs:
       buildBetaPackage:
@@ -33,28 +32,27 @@ jobs:
           
       - name: "Authorise Packaging org"
         run: |
-          echo "${{ secrets.RICO_PACKAGING_ORG_BEARER_KEY }}" > "server.key"
+          echo "${{ secrets.RICO_PACKAGING_ORG_SERVER_KEY }}" > "server.key"
           sfdx force:auth:jwt:grant --clientid=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwtkeyfile ./server.key
           sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
 
       - uses: actions/checkout@v3
-        name: Checkout HCM
+        name: Checkout Project
         with:
-          ref: ${{ github.event.inputs.branchName }}
+          ref: ${{ inputs.branchName }}
           token: ${{ secrets.RICO_PACKAGING_ORG_GITHUB_TOKEN }}
         
       - name: "Deploy Packaging org"
         run: |
-          cd hcm/src
           sfdx force:source:convert --sourcepath=force-app --outputdir package --packagename 'Rico'
           sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 60
       
-      - name: "Get data to build the package"
-        run: |
-          sfdx package1:version:list --json > packages
-          jq .packages.result[] | last > lastPackage
-          echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
-          echo "version=lastPackage.version" >> $GITHUB_ENV
+      # - name: "Get data to build the package"
+      #   run: |
+      #     sfdx package1:version:list --json > packages
+      #     jq .packages.result[] | last > lastPackage
+      #     echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
+      #     echo "version=lastPackage.version" >> $GITHUB_ENV
 
       # - name: create tags
       #   run: |
