@@ -37,9 +37,9 @@ jobs:
           sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
 
        - name: "Set github variables"
-        run: |
-          git config --global user.email "robertoricofernandez@gmail.com"
-          git config --global user.name "Rico"
+         run: |
+           git config --global user.email "robertoricofernandez@gmail.com"
+           git config --global user.name "Rico"
 
       - uses: actions/checkout@v3
         name: Checkout Project
