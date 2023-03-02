@@ -54,8 +54,8 @@ jobs:
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
           echo "lastPackage is $(lastPackage)"
-      -script:  echo "metadataPackageId is $(metadataPackageId)"
-      -script:  echo "version is $(version)"
+      - script:  echo "metadataPackageId is $(metadataPackageId)"
+      - script:  echo "version is $(version)"
           
 
 
