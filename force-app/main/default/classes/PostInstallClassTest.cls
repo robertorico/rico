@@ -9,7 +9,7 @@ public class PostInstallClassTest {
 	}
 
 	@isTest
-	static void testInstallScript() {
+	static void testInstallScript2() {
 		PostInstallClass postinstall = new PostInstallClass();
 		Test.testInstall(postinstall, null);
 		System.assert(true);
