@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "sfdx package1:version:list --json" > packages.json
           cat packages.json
-          echo "jq --raw-output .result.result[] | last" > lastPackage
+          echo "jq --raw-output .result[] | last" > lastPackage
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
           echo "lastPackage is $(lastPackage)"
