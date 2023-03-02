@@ -47,12 +47,12 @@ jobs:
           sfdx force:source:convert --sourcepath=force-app --outputdir package
           sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 10
       
-      # - name: "Get data to build the package"
-      #   run: |
-      #     sfdx package1:version:list --json > packages
-      #     jq .packages.result[] | last > lastPackage
-      #     echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
-      #     echo "version=lastPackage.version" >> $GITHUB_ENV
+      - name: "Get data to build the package"
+        run: |
+          sfdx package1:version:list --json > packages
+          jq .packages.result[] | last > lastPackage
+          echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
+          echo "version=lastPackage.version" >> $GITHUB_ENV
 
       # - name: create tags
       #   run: |
