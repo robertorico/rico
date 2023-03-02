@@ -49,16 +49,14 @@ jobs:
       
       - name: "Get data to build the package"
         run: |
-          sfdx package1:version:list --json > packages
-          jq .packages.result[] | last > lastPackage
+          echo "sfdx package1:version:list --json" > packages.json
+          cat packages.json
+          echo "jq --raw-output .result.result[] | last" > lastPackage
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
           echo "lastPackage is $(lastPackage)"
 
-      - name: "Get data to build the package"
-        run: |
-          echo "metadataPackageId is $(metadataPackageId)"
-          echo "version is $(version)"
+    
           
 
 
