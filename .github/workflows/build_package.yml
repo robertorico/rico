@@ -54,16 +54,11 @@ jobs:
           echo "jq --raw-output .result[] | last" > lastPackage
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
-          echo "lastPackage is $(lastPackage)"
 
-    
-          
-
-
-      # - name: create tags
-      #   run: |
-      #     git tag -a ${{version + 1}} -m ${{version + 1}} && git push origin --tags
-      #     sfdx force:package1:version:create --packageid ${metadataPackageId} --name ${v} --version ${nextVersion} ${buildBetaPackage ? '' : ' --managedreleased'}`;
+      - name: create tags
+        run: |
+          git tag -a 1.1 -m "1.1" && git push origin --tags
+          sfdx force:package1:version:create --packageid '0338d000000E6DqAAK' --name '1.1' --version 1.1 ${buildBetaPackage ? '' : ' --managedreleased'}`;
 
 
 # there is not possibility to include the post install script, is added by default?
