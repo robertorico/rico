@@ -59,12 +59,14 @@ jobs:
           echo "jq --raw-output .result[] | last" > lastPackage
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
-
+    # lo de arriba no termina de funcionar
+    # llamar al script para generar la version
       - name: create tags
         run: |
           git tag -a 1.1 -m "1.1" 
           git push origin --tags
-          sfdx force:package1:version:create --packageid '0338d000000E6DqAAK' --name '1.1' --version 1.1 ${buildBetaPackage ? '' : ' --managedreleased'}`;
+          sfdx force:package1:version:create --packageid "0338d000000E6DqAAK" --name "1.1" --version 1.1 ${buildBetaPackage ? "" : " --managedreleased"}
 
 
 # there is not possibility to include the post install script, is added by default?
+# como guardar la version y el paquete generado y donde
