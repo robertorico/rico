@@ -53,8 +53,9 @@ jobs:
           jq .packages.result[] | last > lastPackage
           echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
           echo "version=lastPackage.version" >> $GITHUB_ENV
-          echo "metadataPackageId is $(metadataPackageId)"
-          echo "version is $(version)"
+          echo "lastPackage is $(lastPackage)"
+      -script:  echo "metadataPackageId is $(metadataPackageId)"
+      -script:  echo "version is $(version)"
           
 
 
