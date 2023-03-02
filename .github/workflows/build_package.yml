@@ -33,7 +33,7 @@ jobs:
       - name: "Authorise Packaging org"
         run: |
           echo "${{ secrets.RICO_PACKAGING_ORG_SERVER_KEY }}" > "server.key"
-          sfdx force:auth:jwt:grant --clientid=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwtkeyfile ./server.key
+          sfdx force:auth:jwt:grant --client-id=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwt-key-file ./server.key
           sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
 
       - name: "Set github variables"
@@ -62,7 +62,8 @@ jobs:
 
       - name: create tags
         run: |
-          git tag -a 1.1 -m "1.1" && git push origin --tags
+          git tag -a 1.1 -m "1.1" 
+          git push origin --tags
           sfdx force:package1:version:create --packageid '0338d000000E6DqAAK' --name '1.1' --version 1.1 ${buildBetaPackage ? '' : ' --managedreleased'}`;
 
 
