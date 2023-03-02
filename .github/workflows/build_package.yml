@@ -36,6 +36,11 @@ jobs:
           sfdx force:auth:jwt:grant --clientid=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwtkeyfile ./server.key
           sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
 
+       - name: "Set github variables"
+        run: |
+          git config --global user.email "robertoricofernandez@gmail.com"
+          git config --global user.name "Rico"
+
       - uses: actions/checkout@v3
         name: Checkout Project
         with:
