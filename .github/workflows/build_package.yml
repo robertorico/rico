@@ -44,8 +44,8 @@ jobs:
         
       - name: "Deploy Packaging org"
         run: |
-          sfdx force:source:convert --sourcepath=force-app --outputdir package --packagename 'Rico'
-          sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 60
+          sfdx force:source:convert --sourcepath=force-app --outputdir package
+          sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 10
       
       # - name: "Get data to build the package"
       #   run: |
