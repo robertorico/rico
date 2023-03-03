@@ -55,5 +55,4 @@ jobs:
 
       - name: build package version
         run: |
-          sfdx package1:version:create --package-id "0338d000000E6DqAAK" --name "${{ inputs.packageVersion }}" --version ${{ inputs.packageVersion }} --managedreleased -w 10
-
+          sfdx package1:version:create --package-id 0338d000000E6DqAAK --name ${{ inputs.packageVersion }} --version ${{ inputs.packageVersion }} --managed-released -w 10
