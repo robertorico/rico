@@ -1,16 +1,12 @@
 name : HCM-Build-Scratch-Org
 
 on:
-  push :
-    branches:
-      - main
   workflow_dispatch:
     inputs:
-      buildBetaPackage:
-        description: "Build a BETA package"
-        type: boolean
-        default: true
-        required: false  
+      packageVersion:
+        description: "Package version in format major.minor, eg: 27.1"
+        type: string
+        required: true  
       branchName:
         description: "Branch name"
         required: false
@@ -36,11 +32,6 @@ jobs:
           sfdx force:auth:jwt:grant --client-id=${{ secrets.RICO_PACKAGING_ORG_CONSUMER_KEY }} --username=${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --jwt-key-file ./server.key
           sfdx force:config:set -g defaultusername=${{ secrets.RICO_PACKAGING_ORG_USERNAME }}
 
-      - name: "Set github variables"
-        run: |
-          git config --global user.email "robertoricofernandez@gmail.com"
-          git config --global user.name "Rico"
-
       - uses: actions/checkout@v3
         name: Checkout Project
         with:
@@ -52,32 +43,17 @@ jobs:
           sfdx force:source:convert --sourcepath=force-app --outputdir package
           sfdx force:mdapi:deploy --deploydir package --targetusername ${{ secrets.RICO_PACKAGING_ORG_USERNAME }} --wait 10
       
-      - name: "Get data to build the package"
+      - name: "Set github variables"
         run: |
-          echo "sfdx package1:version:list --json" > packages.json
-          cat packages.json
-          echo "jq --raw-output .result[] | last" > lastPackage
-          echo "metadataPackageId=lastPackage.MetadataPackageId" >> $GITHUB_ENV
-          echo "version=lastPackage.version" >> $GITHUB_ENV
+          git config --global user.email "robertoricofernandez@gmail.com"
+          git config --global user.name "Rico"
 
       - name: create tags
         run: |
-          git tag -a 1.3 -m "1.3" 
+          git tag -a ${{ inputs.packageVersion }} -m "${{ inputs.packageVersion }}" 
           git push origin --tags
-          sfdx package1:version:create --package-id "0338d000000E6DqAAK" --name "1.3" --version 1.0 -w 10
 
-# Get data to build the package is not working
-# generate version and name
-#should we generate beta packages or managed packages
-
-# sfdx package1:version:create => Successfully uploaded package [04t8d000000EXjWAAW]
-# save beta name and package is in the readme # https://dev.to/dancrtis/self-updating-github-profile-readme-with-javascript-lhm
-
-
-
-# there is not possibility to include the post install script, is added by default?
-
-# Error (1): The version number cannot change until the version is uploaded as Managed - Released
-#     FIELD_INTEGRITY_EXCEPTION: The version number cannot change until the 
-#     version is uploaded as Managed - Released
+      - name: build package version
+        run: |
+          sfdx package1:version:create --package-id "0338d000000E6DqAAK" --name "${{ inputs.packageVersion }}" --version ${{ inputs.packageVersion }} --managedreleased -w 10
 
