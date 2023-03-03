@@ -1,4 +1,4 @@
-name : HCM-Build-Scratch-Org
+name : Build package version
 
 on:
   workflow_dispatch:
